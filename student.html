@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard – TrainerHub</title>
+    <meta name="description" content="Explore trending IT courses and internship opportunities on TrainerHub." />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --accent: #2563eb;
+            --accent2: #3b82f6;
+            --accent-light: rgba(37, 99, 235, 0.07);
+            --accent-border: rgba(37, 99, 235, 0.18);
+            --emerald: #10b981;
+            --amber: #f59e0b;
+            --violet: #7c3aed;
+            --rose: #f43f5e;
+            --cyan: #06b6d4;
+            --orange: #f97316;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 70% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 10% 85%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .topbar-logo {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .topbar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-title span {
+            color: var(--accent);
+        }
+
+        .topbar-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+            border: 1px solid var(--accent-border);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .student-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .student-name strong {
+            color: var(--text);
+        }
+
+        .btn-logout {
+            padding: 8px 20px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #fef2f2;
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* ── MAIN CONTENT ── */
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 36px 32px 80px;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.5s ease both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── WELCOME BANNER ── */
+        .welcome-banner {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            border-radius: 18px;
+            padding: 40px 44px;
+            color: #fff;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 30%;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner p {
+            opacity: 0.88;
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+
+        /* ── SECTION HEADER ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .section-header .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .section-header .icon.courses {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .section-header .icon.internships {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* ── CARD GRID ── */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+            margin-bottom: 50px;
+        }
+
+        /* ── COURSE CARD ── */
+        .course-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 28px 26px 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .course-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+
+        .course-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+        }
+
+        .course-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #06b6d4, #22d3ee);
+        }
+
+        .course-card:nth-child(4)::before {
+            background: linear-gradient(90deg, #f43f5e, #fb7185);
+        }
+
+        .course-card:nth-child(5)::before {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .course-card:nth-child(6)::before {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.1);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.blue {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .card-icon.violet {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .card-icon.cyan {
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .card-icon.rose {
+            background: rgba(244, 63, 94, 0.1);
+        }
+
+        .card-icon.amber {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .card-icon.emerald {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .duration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f1f5f9;
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 50px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .btn-enroll {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-enroll.course-enroll {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-enroll.course-enroll:hover {
+            background: var(--accent2);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
+        }
+
+        .btn-enroll.intern-enroll {
+            background: var(--emerald);
+            color: #fff;
+        }
+
+        .btn-enroll.intern-enroll:hover {
+            background: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ── INTERNSHIP CARD ── */
+        .intern-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 28px 26px 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .intern-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        .intern-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #f97316, #fb923c);
+        }
+
+        .intern-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #06b6d4, #22d3ee);
+        }
+
+        .intern-card:nth-child(4)::before {
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+        }
+
+        .intern-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.1);
+        }
+
+        .intern-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .type-badge.remote {
+            background: rgba(6, 182, 212, 0.1);
+            color: #0891b2;
+        }
+
+        .type-badge.onsite {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .type-badge.hybrid {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+        }
+
+        /* ── TOAST NOTIFICATION ── */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 22px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.hide {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes slideOut {
+            to {
+                opacity: 0;
+                transform: translateX(60px) scale(0.95);
+            }
+        }
+
+        .toast-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            background: rgba(16, 185, 129, 0.1);
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .toast-msg {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 14px 18px;
+            }
+
+            .dashboard {
+                padding: 20px 14px 40px;
+            }
+
+            .welcome-banner {
+                padding: 28px 24px;
+            }
+
+            .welcome-banner h1 {
+                font-size: 1.4rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .topbar-badge {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .student-name {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── TOPBAR ── -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="topbar-logo">T</div>
+            <span class="topbar-title">Trainer<span>Hub</span></span>
+            <span class="topbar-badge">🎓 Student Portal</span>
+        </div>
+        <div class="topbar-right">
+            <span class="student-name">Welcome, <strong id="studentDisplayName">Student</strong></span>
+            <button class="btn-logout" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+
+    <!-- ── DASHBOARD ── -->
+    <div class="dashboard">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1 id="welcomeText">Welcome back, Student 👋</h1>
+            <p>Explore trending IT courses and exciting internship opportunities. Enroll today and kickstart your tech
+                career!</p>
+        </div>
+
+        <!-- ── TRENDING IT COURSES ── -->
+        <div class="section-header">
+            <div class="icon courses">🔥</div>
+            <div>
+                <h2 class="section-title">Trending IT Courses</h2>
+                <p class="section-subtitle">Industry-relevant programs to level up your skills</p>
+            </div>
+        </div>
+
+        <div class="card-grid" id="coursesGrid">
+
+            <!-- Course 1: Full Stack Development -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon blue">💻</div>
+                    <span class="duration-badge">⏱ 12 Weeks</span>
+                </div>
+                <h3 class="card-title">Full Stack Web Development</h3>
+                <p class="card-desc">Master HTML, CSS, JavaScript, React, Node.js, and MongoDB. Build production-ready
+                    web applications from scratch and deploy them to the cloud.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('Full Stack Web Development')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Course 2: AI & Machine Learning -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon violet">🤖</div>
+                    <span class="duration-badge">⏱ 16 Weeks</span>
+                </div>
+                <h3 class="card-title">AI & Machine Learning</h3>
+                <p class="card-desc">Dive into neural networks, NLP, computer vision, and deep learning with Python and
+                    TensorFlow. Work on real-world AI projects and datasets.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('AI & Machine Learning')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Course 3: Cloud Computing & AWS -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon cyan">☁️</div>
+                    <span class="duration-badge">⏱ 10 Weeks</span>
+                </div>
+                <h3 class="card-title">Cloud Computing & AWS</h3>
+                <p class="card-desc">Learn cloud architecture, AWS services (EC2, S3, Lambda), containerization with
+                    Docker, and infrastructure as code with Terraform.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('Cloud Computing & AWS')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Course 4: Cybersecurity Essentials -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon rose">🛡️</div>
+                    <span class="duration-badge">⏱ 8 Weeks</span>
+                </div>
+                <h3 class="card-title">Cybersecurity Essentials</h3>
+                <p class="card-desc">Understand ethical hacking, penetration testing, network security, and threat
+                    detection. Prepare for industry certifications like CompTIA Security+.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('Cybersecurity Essentials')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Course 5: Data Science & Analytics -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon amber">📊</div>
+                    <span class="duration-badge">⏱ 14 Weeks</span>
+                </div>
+                <h3 class="card-title">Data Science & Analytics</h3>
+                <p class="card-desc">Master Python, Pandas, SQL, and data visualization. Learn statistical modeling,
+                    predictive analytics, and build compelling data-driven dashboards.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('Data Science & Analytics')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Course 6: DevOps & CI/CD -->
+            <div class="course-card">
+                <div class="card-top">
+                    <div class="card-icon emerald">⚙️</div>
+                    <span class="duration-badge">⏱ 10 Weeks</span>
+                </div>
+                <h3 class="card-title">DevOps & CI/CD</h3>
+                <p class="card-desc">Learn Git, Jenkins, Docker, Kubernetes, and CI/CD pipelines. Automate deployments
+                    and master infrastructure monitoring with modern DevOps tools.</p>
+                <button class="btn-enroll course-enroll" onclick="handleEnroll('DevOps & CI/CD')">
+                    Enroll Now →
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ── INTERNSHIP OPPORTUNITIES ── -->
+        <div class="section-header">
+            <div class="icon internships">🚀</div>
+            <div>
+                <h2 class="section-title">Internship Opportunities</h2>
+                <p class="section-subtitle">Gain real-world experience with top companies</p>
+            </div>
+        </div>
+
+        <div class="card-grid" id="internshipsGrid">
+
+            <!-- Internship 1 -->
+            <div class="intern-card">
+                <div class="card-top">
+                    <div class="card-icon emerald">🏢</div>
+                    <span class="duration-badge">⏱ 3 Months</span>
+                </div>
+                <div class="intern-meta">
+                    <span class="type-badge remote">🌐 Remote</span>
+                </div>
+                <h3 class="card-title">Frontend Developer Intern</h3>
+                <p class="card-desc">Work with a product team to build responsive user interfaces using React and modern
+                    CSS. Participate in code reviews and agile sprints.</p>
+                <button class="btn-enroll intern-enroll" onclick="handleEnroll('Frontend Developer Intern')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Internship 2 -->
+            <div class="intern-card">
+                <div class="card-top">
+                    <div class="card-icon amber">🏢</div>
+                    <span class="duration-badge">⏱ 6 Months</span>
+                </div>
+                <div class="intern-meta">
+                    <span class="type-badge onsite">📍 On-Site</span>
+                </div>
+                <h3 class="card-title">Data Analytics Intern</h3>
+                <p class="card-desc">Analyze large datasets, build dashboards in Power BI / Tableau, and deliver
+                    actionable insights. Great for aspiring data analysts and scientists.</p>
+                <button class="btn-enroll intern-enroll" onclick="handleEnroll('Data Analytics Intern')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Internship 3 -->
+            <div class="intern-card">
+                <div class="card-top">
+                    <div class="card-icon cyan">🏢</div>
+                    <span class="duration-badge">⏱ 4 Months</span>
+                </div>
+                <div class="intern-meta">
+                    <span class="type-badge hybrid">🔀 Hybrid</span>
+                </div>
+                <h3 class="card-title">Backend Engineering Intern</h3>
+                <p class="card-desc">Design and build REST APIs using Python / Node.js, integrate databases, and write
+                    automated tests. Work alongside senior engineers on live products.</p>
+                <button class="btn-enroll intern-enroll" onclick="handleEnroll('Backend Engineering Intern')">
+                    Enroll Now →
+                </button>
+            </div>
+
+            <!-- Internship 4 -->
+            <div class="intern-card">
+                <div class="card-top">
+                    <div class="card-icon violet">🏢</div>
+                    <span class="duration-badge">⏱ 3 Months</span>
+                </div>
+                <div class="intern-meta">
+                    <span class="type-badge remote">🌐 Remote</span>
+                </div>
+                <h3 class="card-title">Cloud & DevOps Intern</h3>
+                <p class="card-desc">Help manage cloud infrastructure on AWS/Azure, set up CI/CD pipelines, and learn
+                    containerization. Perfect for students passionate about automation.</p>
+                <button class="btn-enroll intern-enroll" onclick="handleEnroll('Cloud & DevOps Intern')">
+                    Enroll Now →
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ── TOAST CONTAINER ── -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ── Auth Guard ──────────────────────────────────────
+        const studentData = JSON.parse(sessionStorage.getItem('studentUser') || 'null');
+        if (!studentData || studentData.role !== 'student') {
+            window.location.href = '/';
+        } else {
+            document.getElementById('studentDisplayName').textContent = studentData.name;
+            document.getElementById('welcomeText').textContent = `Welcome back, ${studentData.name} 👋`;
+        }
+
+        // ── Logout ──────────────────────────────────────────
+        function logout() {
+            sessionStorage.removeItem('studentUser');
+            window.location.href = '/';
+        }
+
+        // ── Enroll Handler (toast notification) ─────────────
+        function handleEnroll(title) {
+            showToast(title);
+        }
+
+        function showToast(title) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">✅</div>
+                <div class="toast-content">
+                    <div class="toast-title">Enrollment Registered!</div>
+                    <div class="toast-msg">You've shown interest in <strong>${escapeHtml(title)}</strong>. We'll contact you soon.</div>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // ── Escape HTML ─────────────────────────────────────
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+    </script>
+
+</body>
+
+</html>

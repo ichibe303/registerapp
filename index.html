@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrainerHub – Onboarding Platform</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Nunito+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --accent: #2563eb;
+            --accent2: #3b82f6;
+            --accent-shadow: rgba(37, 99, 235, 0.28);
+            --accent-badge: rgba(37, 99, 235, 0.07);
+            --accent-badge-border: rgba(37, 99, 235, 0.2);
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --nav-bg: rgba(244, 246, 251, 0.88);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 400;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 70% 15%, rgba(37, 99, 235, 0.09) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 10% 85%, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+            backdrop-filter: blur(16px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 24px rgba(37, 99, 235, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.2px;
+            border: none;
+            background: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface);
+            color: var(--text);
+            border-color: rgba(37, 99, 235, 0.2);
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.08);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: 1px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px var(--accent-shadow);
+        }
+
+        .btn-lg {
+            padding: 15px 42px;
+            font-size: 1.05rem;
+            border-radius: 10px;
+        }
+
+        /* ── HERO ── */
+        main {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 100px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-badge);
+            border: 1px solid var(--accent-badge-border);
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 0.73rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 36px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 1.6s ease infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.5);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 7vw, 5.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+            max-width: 820px;
+            color: var(--text);
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+
+        h1 .highlight {
+            color: var(--accent);
+            font-style: italic;
+            position: relative;
+        }
+
+        h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            margin-top: 28px;
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 500px;
+            line-height: 1.8;
+            font-weight: 300;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+
+        .hero-actions {
+            margin-top: 50px;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── MODAL OVERLAY ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* ── MODAL CARD ── */
+        .modal-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px 44px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            position: relative;
+            animation: popIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #0f172a;
+        }
+
+        .modal-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 24px;
+        }
+
+        .modal-card label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-card input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background: #f8fafc;
+            margin-bottom: 18px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .modal-card input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: #fff;
+        }
+
+        .modal-card .modal-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin-top: 4px;
+        }
+
+        .modal-card .modal-btn:hover {
+            background: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .modal-footer a {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .modal-card {
+                padding: 36px 24px;
+                margin: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="42" height="42" rx="10" fill="#2563eb" />
+                    <path d="M21 10L30 15.5V26.5L21 32L12 26.5V15.5L21 10Z" fill="rgba(255,255,255,0.15)" stroke="white"
+                        stroke-width="1.5" />
+                    <circle cx="21" cy="21" r="5" fill="white" />
+                    <line x1="21" y1="10" x2="21" y2="16" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    <line x1="21" y1="26" x2="21" y2="32" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    <line x1="12" y1="15.5" x2="17.2" y2="18.5" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="24.8" y1="23.5" x2="30" y2="26.5" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="30" y1="15.5" x2="24.8" y2="18.5" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="17.2" y1="23.5" x2="12" y2="26.5" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
+            <span class="logo-text">Trainer<span>Hub</span></span>
+        </a>
+
+        <div class="nav-actions">
+            <button class="btn btn-ghost" onclick="openModal('login')">Log In</button>
+            <button class="btn btn-primary" onclick="openModal('signup')">Sign Up</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="badge">✦ Trainers Onboarding Platform</div>
+        <h1>Onboard Trainers.<br>Build <span class="highlight">Better Teams</span>.</h1>
+        <p class="subtitle">
+            The all-in-one platform to onboard, manage, and empower your trainers — from first login to full
+            certification.
+        </p>
+        <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="openModal('signup')">Sign Up →</button>
+        </div>
+    </main>
+
+    <!-- ── LOGIN MODAL (tabbed: Student / Admin) ── -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal('login')">✕</button>
+
+            <!-- Tab buttons -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tabStudent" onclick="switchTab('student')">🎓 Student</button>
+                <button class="tab-btn" id="tabAdmin" onclick="switchTab('admin')">🛡️ Admin</button>
+            </div>
+
+            <!-- Student login -->
+            <div id="studentPanel">
+                <label>Email Address</label>
+                <input id="studentEmail" type="email" placeholder="student@example.com" />
+                <label>Password</label>
+                <input id="studentPassword" type="password" placeholder="••••••••" />
+                <div id="studentMsg" class="form-msg"></div>
+                <button class="modal-btn" onclick="handleLogin('student')">Log In as Student</button>
+            </div>
+
+            <!-- Admin login -->
+            <div id="adminPanel" style="display:none;">
+                <label>Admin Email</label>
+                <input id="adminEmail" type="email" placeholder="admin@example.com" />
+                <label>Admin Password</label>
+                <input id="adminPassword" type="password" placeholder="••••••••" />
+                <div id="adminMsg" class="form-msg"></div>
+                <button class="modal-btn admin-btn" onclick="handleLogin('admin')">Log In as Admin</button>
+                <p class="modal-footer" style="margin-top:14px">
+                    New admin? <a onclick="switchModal('login','adminSignup')">Register as Admin</a>
+                </p>
+            </div>
+
+            <p class="modal-footer">
+                Don't have an account? <a onclick="switchModal('login','signup')">Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── SIGNUP MODAL (Student) ── -->
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal('signup')">✕</button>
+            <h2>Create your student account</h2>
+
+            <label>Full Name</label>
+            <input id="signupName" type="text" placeholder="John Smith" />
+            <label>Email Address</label>
+            <input id="signupEmail" type="email" placeholder="xyz@example.com" />
+            <label>Password</label>
+            <input id="signupPassword" type="password" placeholder="••••••••" />
+
+            <div id="signupMsg" class="form-msg"></div>
+            <button class="modal-btn" onclick="handleSignup()">Sign Up as Student</button>
+
+            <p class="modal-footer">
+                Already have an account? <a onclick="switchModal('signup','login')">Log In</a>
+            </p>
+            <p class="modal-footer" style="margin-top:6px">
+                Are you an admin? <a onclick="switchModal('signup','adminSignup')">Register as Admin</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── ADMIN SIGNUP MODAL ── -->
+    <div class="modal-overlay" id="adminSignupModal">
+        <div class="modal-card admin-card">
+            <button class="modal-close" onclick="closeModal('adminSignup')">✕</button>
+            <div class="admin-header">
+                <span class="admin-shield">🛡️</span>
+                <h2>Admin Registration</h2>
+            </div>
+
+            <label>Full Name</label>
+            <input id="adminSignupName" type="text" placeholder="Admin Name" />
+            <label>Email Address</label>
+            <input id="adminSignupEmail" type="email" placeholder="admin@example.com" />
+            <label>Password</label>
+            <input id="adminSignupPassword" type="password" placeholder="Min 6 characters" />
+            <label>Admin Code <span style="color:#7c3aed;font-size:0.72rem">(required)</span></label>
+            <input id="adminSignupCode" type="password" placeholder="Enter the standard admin code" />
+
+            <div id="adminSignupMsg" class="form-msg"></div>
+            <button class="modal-btn admin-btn" onclick="handleAdminSignup()">Register as Admin</button>
+
+            <p class="modal-footer">
+                Already an admin? <a
+                    onclick="switchModal('adminSignup','login'); setTimeout(()=>switchTab('admin'),100)">Log In</a>
+            </p>
+            <p class="modal-footer" style="margin-top:6px">
+                Student instead? <a onclick="switchModal('adminSignup','signup')">Student Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <style>
+        /* ── TAB BAR ── */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 9px 0;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: #2563eb;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #tabAdmin.active {
+            color: #7c3aed;
+        }
+
+        /* Admin button purple */
+        .admin-btn {
+            background: #7c3aed !important;
+        }
+
+        .admin-btn:hover {
+            background: #6d28d9 !important;
+            box-shadow: 0 8px 22px rgba(124, 58, 237, 0.3) !important;
+        }
+
+        .form-msg {
+            font-size: 0.82rem;
+            min-height: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Admin card accent */
+        .admin-card {
+            border-top: 3px solid #7c3aed;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .admin-header h2 {
+            margin-bottom: 0;
+        }
+
+        .admin-shield {
+            font-size: 1.6rem;
+        }
+    </style>
+
+    <script>
+        // ── TAB SWITCHER ─────────────────────────────────────
+        function switchTab(role) {
+            const isStudent = role === 'student';
+            document.getElementById('studentPanel').style.display = isStudent ? 'block' : 'none';
+            document.getElementById('adminPanel').style.display = isStudent ? 'none' : 'block';
+            document.getElementById('tabStudent').classList.toggle('active', isStudent);
+            document.getElementById('tabAdmin').classList.toggle('active', !isStudent);
+        }
+
+        // ── LOGIN (Student or Admin) → calls Python /login ──
+        async function handleLogin(role) {
+            const email = document.getElementById(role + 'Email').value.trim();
+            const password = document.getElementById(role + 'Password').value;
+            const msgId = role + 'Msg';
+            const btn = document.querySelector(`#${role}Panel .modal-btn`);
+
+            if (!email || !password) {
+                showMsg(msgId, 'Please fill in all fields.', true); return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Please wait...';
+            showMsg(msgId, '', false);
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, role })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    showMsg(msgId, '✓ ' + result.message, false);
+                    document.getElementById(role + 'Email').value = '';
+                    document.getElementById(role + 'Password').value = '';
+                    if (role === 'admin') {
+                        // Store admin data and redirect to admin dashboard
+                        sessionStorage.setItem('adminUser', JSON.stringify(result.data));
+                        setTimeout(() => { window.location.href = '/admin.html'; }, 1000);
+                    } else {
+                        // Store student data and redirect to student dashboard
+                        sessionStorage.setItem('studentUser', JSON.stringify(result.data));
+                        setTimeout(() => { window.location.href = '/student.html'; }, 1000);
+                    }
+                } else {
+                    showMsg(msgId, '✗ ' + result.message, true);
+                }
+            } catch (err) {
+                showMsg(msgId, '✗ Cannot reach server. Is app.py running?', true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = role === 'admin' ? 'Log In as Admin' : 'Log In as Student';
+            }
+        }
+
+        // ── STUDENT SIGN UP → calls Python /signup ──────────
+        async function handleSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const btn = document.querySelector('#signupModal .modal-btn');
+
+            if (!name || !email || !password) {
+                showMsg('signupMsg', 'Please fill in all fields.', true); return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showMsg('signupMsg', 'Please enter a valid email.', true); return;
+            }
+            if (password.length < 6) {
+                showMsg('signupMsg', 'Password must be at least 6 characters.', true); return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Please wait...';
+            showMsg('signupMsg', '', false);
+
+            try {
+                const res = await fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    showMsg('signupMsg', '✓ ' + result.message, false);
+                    document.getElementById('signupName').value = '';
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupPassword').value = '';
+                    setTimeout(() => { showMsg('signupMsg', '', false); switchModal('signup', 'login'); }, 1500);
+                } else {
+                    showMsg('signupMsg', '✗ ' + result.message, true);
+                }
+            } catch (err) {
+                showMsg('signupMsg', '✗ Cannot reach server. Is app.py running?', true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign Up as Student';
+            }
+        }
+
+        // ── ADMIN SIGN UP → calls Python /admin-signup ──────
+        async function handleAdminSignup() {
+            const name = document.getElementById('adminSignupName').value.trim();
+            const email = document.getElementById('adminSignupEmail').value.trim();
+            const password = document.getElementById('adminSignupPassword').value;
+            const admin_code = document.getElementById('adminSignupCode').value.trim();
+            const btn = document.querySelector('#adminSignupModal .modal-btn');
+
+            if (!name || !email || !password || !admin_code) {
+                showMsg('adminSignupMsg', 'All fields including admin code are required.', true); return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showMsg('adminSignupMsg', 'Please enter a valid email.', true); return;
+            }
+            if (password.length < 6) {
+                showMsg('adminSignupMsg', 'Password must be at least 6 characters.', true); return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Please wait...';
+            showMsg('adminSignupMsg', '', false);
+
+            try {
+                const res = await fetch('/admin-signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, admin_code })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    showMsg('adminSignupMsg', '✓ ' + result.message, false);
+                    document.getElementById('adminSignupName').value = '';
+                    document.getElementById('adminSignupEmail').value = '';
+                    document.getElementById('adminSignupPassword').value = '';
+                    document.getElementById('adminSignupCode').value = '';
+                    setTimeout(() => {
+                        showMsg('adminSignupMsg', '', false);
+                        switchModal('adminSignup', 'login');
+                        setTimeout(() => switchTab('admin'), 100);
+                    }, 1500);
+                } else {
+                    showMsg('adminSignupMsg', '✗ ' + result.message, true);
+                }
+            } catch (err) {
+                showMsg('adminSignupMsg', '✗ Cannot reach server. Is app.py running?', true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Register as Admin';
+            }
+        }
+
+        // ── Helpers ──────────────────────────────────────────
+        function showMsg(id, text, isError) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.style.color = isError ? '#e11d48' : '#10b981';
+        }
+
+        function openModal(type) {
+            document.getElementById(type + 'Modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(type) {
+            document.getElementById(type + 'Modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function switchModal(from, to) { closeModal(from); openModal(to); }
+
+        // Close on backdrop click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function (e) {
+                if (e.target === this) { this.classList.remove('active'); document.body.style.overflow = ''; }
+            });
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => {
+                    m.classList.remove('active'); document.body.style.overflow = '';
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

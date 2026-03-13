@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard – TrainerHub</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f1f3f9;
+            --surface: #ffffff;
+            --accent: #7c3aed;
+            --accent2: #6d28d9;
+            --accent-light: rgba(124, 58, 237, 0.08);
+            --accent-border: rgba(124, 58, 237, 0.18);
+            --blue: #2563eb;
+            --green: #10b981;
+            --red: #ef4444;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .topbar-logo {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .topbar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-title span {
+            color: var(--accent);
+        }
+
+        .topbar-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+            border: 1px solid var(--accent-border);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .admin-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .admin-name strong {
+            color: var(--text);
+        }
+
+        .btn-logout {
+            padding: 8px 20px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #fef2f2;
+            color: var(--red);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* ── MAIN CONTENT ── */
+        .dashboard {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 36px 32px 60px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            border-radius: 16px;
+            padding: 36px 40px;
+            color: #fff;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.85;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .stat-card.purple .stat-value {
+            color: var(--accent);
+        }
+
+        .stat-card.blue .stat-value {
+            color: var(--blue);
+        }
+
+        .stat-card.green .stat-value {
+            color: var(--green);
+        }
+
+        /* ── TABLE ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .refresh-btn {
+            padding: 7px 16px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-color: var(--accent-border);
+        }
+
+        .table-wrap {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
+            margin-bottom: 32px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px 20px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fafbff;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .role-badge.student {
+            background: rgba(37, 99, 235, 0.08);
+            color: #2563eb;
+        }
+
+        .role-badge.admin {
+            background: rgba(124, 58, 237, 0.08);
+            color: #7c3aed;
+        }
+
+        .empty-msg {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .timestamp {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 700px) {
+            .topbar {
+                padding: 14px 18px;
+            }
+
+            .dashboard {
+                padding: 20px 14px 40px;
+            }
+
+            .welcome-banner {
+                padding: 24px;
+            }
+
+            .stat-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            th,
+            td {
+                padding: 10px 12px;
+                font-size: 0.82rem;
+            }
+        }
+
+        /* ── LOADING SPINNER ── */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* fade in */
+        .dashboard {
+            animation: fadeIn 0.4s ease both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="topbar-logo">T</div>
+            <span class="topbar-title">Trainer<span>Hub</span></span>
+            <span class="topbar-badge">🛡️ Admin Panel</span>
+        </div>
+        <div class="topbar-right">
+            <span class="admin-name">Signed in as <strong id="adminDisplayName">Admin</strong></span>
+            <button class="btn-logout" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+
+        <!-- Welcome -->
+        <div class="welcome-banner">
+            <h1 id="welcomeText">Welcome back, Admin 👋</h1>
+            <p>Here's an overview of all student registrations and login activity.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stat-row">
+            <div class="stat-card purple">
+                <div class="stat-label">Total Students</div>
+                <div class="stat-value" id="statStudents">–</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-label">Total Logins</div>
+                <div class="stat-value" id="statLogins">–</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-label">Total Admins</div>
+                <div class="stat-value" id="statAdmins">–</div>
+            </div>
+        </div>
+
+        <!-- Student Table -->
+        <div class="section-header">
+            <h2 class="section-title">📋 Registered Students</h2>
+            <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Registered On</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <tr>
+                        <td colspan="4" class="empty-msg"><span class="spinner"></span> Loading…</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Login Logs Table -->
+        <div class="section-header">
+            <h2 class="section-title">🕑 Login History</h2>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Logged In At</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                    <tr>
+                        <td colspan="4" class="empty-msg"><span class="spinner"></span> Loading…</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // ── Read admin info from sessionStorage ──
+        const adminData = JSON.parse(sessionStorage.getItem('adminUser') || 'null');
+        if (!adminData || adminData.role !== 'admin') {
+            // Not logged in as admin → redirect to home
+            window.location.href = '/';
+        } else {
+            document.getElementById('adminDisplayName').textContent = adminData.name;
+            document.getElementById('welcomeText').textContent = `Welcome back, ${adminData.name} 👋`;
+        }
+
+        // ── Logout ──
+        function logout() {
+            sessionStorage.removeItem('adminUser');
+            window.location.href = '/';
+        }
+
+        // ── Format date ──
+        function fmtDate(iso) {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                + '  ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // ── Load all data ──
+        async function loadAll() {
+            await Promise.all([loadStudents(), loadLogs(), loadAdminCount()]);
+        }
+
+        async function loadStudents() {
+            try {
+                const res = await fetch('/users');
+                const data = await res.json();
+                document.getElementById('statStudents').textContent = data.length;
+
+                const tbody = document.getElementById('studentTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">No students registered yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.map((u, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${esc(u.name)}</strong></td>
+          <td>${esc(u.email)}</td>
+          <td class="timestamp">${fmtDate(u.created_at)}</td>
+        </tr>
+      `).join('');
+            } catch (e) {
+                document.getElementById('studentTableBody').innerHTML =
+                    '<tr><td colspan="4" class="empty-msg" style="color:#ef4444">Failed to load students.</td></tr>';
+            }
+        }
+
+        async function loadLogs() {
+            try {
+                const res = await fetch('/logs');
+                const data = await res.json();
+                document.getElementById('statLogins').textContent = data.length;
+
+                const tbody = document.getElementById('logsTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">No login records yet.</td></tr>';
+                    return;
+                }
+                // Show newest first
+                const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                tbody.innerHTML = sorted.map((l, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${esc(l.email)}</td>
+          <td><span class="role-badge ${l.role}">${l.role}</span></td>
+          <td class="timestamp">${fmtDate(l.created_at)}</td>
+        </tr>
+      `).join('');
+            } catch (e) {
+                document.getElementById('logsTableBody').innerHTML =
+                    '<tr><td colspan="4" class="empty-msg" style="color:#ef4444">Failed to load logs.</td></tr>';
+            }
+        }
+
+        async function loadAdminCount() {
+            try {
+                const res = await fetch('/admins');
+                const data = await res.json();
+                document.getElementById('statAdmins').textContent = data.length;
+            } catch (e) { /* ignore */ }
+        }
+
+        // ── Escape HTML ──
+        function esc(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ── Initial load ──
+        loadAll();
+    </script>
+
+</body>
+
+</html>
